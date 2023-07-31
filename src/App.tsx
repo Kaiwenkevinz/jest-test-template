@@ -6,24 +6,24 @@ interface TodoType {
   isCompleted?: boolean;
 }
 
-const mockTodos: TodoType[] = [
-  {
-    text: "Go to gym",
-    isCompleted: false,
-  },
-  {
-    text: "Buy milk",
-    isCompleted: true,
-  },
-  {
-    text: "Sleep early",
-    isCompleted: false,
-  },
-];
-
 function App() {
+  const mockTodos: TodoType[] = [
+    {
+      text: "Go to gym",
+      isCompleted: false,
+    },
+    {
+      text: "Buy milk",
+      isCompleted: true,
+    },
+    {
+      text: "Sleep early",
+      isCompleted: false,
+    },
+  ];
+
   const [todos, setTodos] = useState<TodoType[]>(mockTodos);
-  const [currentInput, setCurrentInput] = useState<string>();
+  const [currentInput, setCurrentInput] = useState<string>("");
 
   const toggleTodo = (index: number) => {
     const todo = todos[index];
@@ -49,24 +49,34 @@ function App() {
   };
 
   return (
-    <div className="app">
+    <div>
       {todos.map((todo, index) => {
         return (
-          <div className="todo">
+          <div data-testid="todo-item" key={index}>
             <span
               style={{ textDecoration: todo.isCompleted ? "line-through" : "" }}
             >
               {todo.text}
+              <button
+                onClick={() => toggleTodo(index)}
+                data-testid="toggle-todo"
+              >
+                Toggle
+              </button>
+              <button
+                onClick={() => removeTodo(index)}
+                data-testid="remove-todo"
+              >
+                Remove
+              </button>
             </span>
-            <button onClick={() => toggleTodo(index)}>Toggle</button>
-            <button onClick={() => removeTodo(index)}>Remove</button>
           </div>
         );
       })}
       <form onSubmit={handleSubmit}>
         <input
           type="text"
-          placeholder="Enter your plan for today."
+          placeholder="What's your plan?"
           value={currentInput}
           onChange={(e) => setCurrentInput(e.target.value)}
         />
